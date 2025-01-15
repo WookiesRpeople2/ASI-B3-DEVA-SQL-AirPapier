@@ -1,0 +1,63 @@
+CREATE DATABASE IF NOT EXISTS product_management_system;
+USE product_management_system;
+
+CREATE TABLE IF NOT EXISTS clients (
+    id VARCHAR(255) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255),
+    telephone VARCHAR(50),
+    address VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS suppliers (
+    id VARCHAR(255) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    telephone VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS products (
+    id VARCHAR(255) PRIMARY KEY,
+    reference VARCHAR(255) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    quantity INTEGER NOT NULL,
+    categorie_id VARCHAR(255),
+    FOREIGN KEY (categorie_id) REFERENCES categories(id)
+);
+
+CREATE TABLE IF NOT EXISTS product_suppliers (
+    product_id VARCHAR(255),
+    supplier_id VARCHAR(255),
+    supply_price DECIMAL(10,2),
+    PRIMARY KEY (product_id, supplier_id),
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    FOREIGN KEY (supplier_id) REFERENCES suppliers(id)
+);
+
+CREATE TABLE IF NOT EXISTS categories (
+    id VARCHAR(255) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+    id VARCHAR(255) PRIMARY KEY,
+    client_id VARCHAR(255),
+    total_price DECIMAL(10,2) NOT NULL,
+    quantity INTEGER NOT NULL,
+    FOREIGN KEY (client_id) REFERENCES clients(id)
+);
+
+CREATE TABLE IF NOT EXISTS order_lines (
+    id VARCHAR(255) PRIMARY KEY,
+    order_id VARCHAR(255),
+    product_id VARCHAR(255),
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
+CREATE INDEX idx_products_supplier ON products(suppliers_id);
+CREATE INDEX idx_products_category ON products(categorie_id);
+CREATE INDEX idx_orders_client ON orders(client_id);
+CREATE INDEX idx_order_lines_order ON order_lines(order_id);
+CREATE INDEX idx_order_lines_product ON order_lines(product_id);
