@@ -51,7 +51,7 @@ public class ClientHandler {
                 row.put("telephone", updatedClient.getTelephone());
             }
             if (row.containsKey("address") && updatedClient.getAddress() != null) {
-                row.put("ddress", updatedClient.getAddress());
+                row.put("address", updatedClient.getAddress());
             }
         }
 

@@ -5,6 +5,7 @@ import com.airpapier.lib.Router;
 import com.airpapier.middleware.Headers;
 import com.airpapier.routes.CategoryRoutes;
 import com.airpapier.routes.ProductRoutes;
+import com.airpapier.routes.SupplierRoutes;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
@@ -24,6 +25,7 @@ public class App
         router.useMiddleware(new Headers());
         router.combineRoutes("/api/products", new ProductRoutes(server));
         router.combineRoutes("/api/categories", new CategoryRoutes(server));
+        router.combineRoutes("/api/suppliers", new SupplierRoutes(server));
 
         server.setExecutor(null);
         server.start();
