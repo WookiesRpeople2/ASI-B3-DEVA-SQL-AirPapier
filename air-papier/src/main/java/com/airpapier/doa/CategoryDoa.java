@@ -7,10 +7,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-//In-band SQL Injection
+//time based SQL Injection
 
 public class CategoryDoa {
-    public List<Map<String, Object>> getAllCaegories() throws SQLException{
+    public List<Map<String, Object>> getAllCategories() throws SQLException{
         String query = "SELECT * FROM categories";
         return DataBaseConnection.getResults(query);
     }

@@ -1,12 +1,10 @@
 package com.airpapier.handler;
 
 import com.airpapier.doa.CategoryDoa;
-import com.airpapier.doa.ProductDoa;
 import com.airpapier.lib.Context;
 import com.airpapier.lib.ErrorResponse;
 import com.airpapier.lib.SuccessResponse;
 import com.airpapier.model.Category;
-import com.airpapier.model.Product;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -17,8 +15,8 @@ public class CategoryHandler {
     private final CategoryDoa categoryDoa = new CategoryDoa();
 
     public void getAllCategories(Context ctx) throws SQLException, IOException {
-            List<Map<String, Object>> products = categoryDoa.getAllCaegories();
-            ctx.response().json(products, 200);
+        List<Map<String, Object>> categories = categoryDoa.getAllCategories();
+        ctx.response().json(categories, 200);
     }
 
     public void getCategoryById(Context ctx) throws SQLException, IOException {
@@ -34,7 +32,7 @@ public class CategoryHandler {
 
     public void updateCategory(Context ctx) throws SQLException, IOException {
         String categoryId = ctx.request().param("categoryId");
-        Product updatedProduct = ctx.request().body(Product.class);
+        Category updatedCategory = ctx.request().body(Category.class);
 
         List<Map<String, Object>> existingCategory = categoryDoa.getCategoryById(categoryId);
         if (existingCategory.get(0) == null) {
@@ -43,17 +41,11 @@ public class CategoryHandler {
         }
 
         for (Map<String, Object> row : existingCategory) {
-            if (row.containsKey("reference") && updatedProduct.getReference() != null) {
-                row.put("reference", updatedProduct.getReference());
+            if (row.containsKey("name") && updatedCategory.getName() != null) {
+                row.put("name", updatedCategory.getName());
             }
-            if (row.containsKey("price") && updatedProduct.getPrice() != null) {
-                row.put("price", updatedProduct.getPrice());
-            }
-            if (row.containsKey("quantity") && updatedProduct.getQuantity() != null) {
-                row.put("quantity", updatedProduct.getQuantity());
-            }
-            if (row.containsKey("category_id") && updatedProduct.getCategory_id() != null) {
-                row.put("category_id", updatedProduct.getCategory_id());
+            if (row.containsKey("description") && updatedCategory.getDescription() != null) {
+                row.put("description", updatedCategory.getDescription());
             }
         }
 
