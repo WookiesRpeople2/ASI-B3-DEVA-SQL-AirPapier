@@ -124,7 +124,7 @@
             </goals>
             <configuration>
               <files>
-                <file>/home/keenan/work/ASI-B3-DEVA-SQL-AirPapier/air-papier/src/main/assets/.env</file>
+                <file>/src/main/resources/.env</file>
               </files>
             </configuration>
           </execution>
@@ -146,7 +146,7 @@
           <schemas>${DATABASE}</schemas>
           <cleanDisabled>false</cleanDisabled>
           <locations>
-            <location>filesystem:/home/keenan/work/ASI-B3-DEVA-SQL-AirPapier/air-papier/src/main/java/com/airpapier/database/migrations</location>
+            <location>filesystem:/src/main/java/com/airpapier/database/migrations</location>
           </locations>
         </configuration>
       </plugin>

@@ -14,11 +14,8 @@ public class ProductHandler {
     private final ProductDoa productDoa = new ProductDoa();
 
     public void getAllProducts(Context ctx) throws SQLException, IOException {
-        String query = ctx.request().query("id");
-        if(query == null) {
-            List<Product> products = productDoa.getAllProducts();
+            List<Map<String, Object>> products = productDoa.getAllProducts();
             ctx.response().json(products, 200);
-        }
     }
 
     public void getProductById(Context ctx) throws SQLException, IOException {
@@ -57,7 +54,7 @@ public class ProductHandler {
             }
         }
 
-        List<Map<String, Object>> result = productDoa.updateProduct(productId, existingProduct);
+        List<Map<String, Object>> result = productDoa.updateProduct(productId, (Product)existingProduct.get(0));
         ctx.response().json(result, 200);
     }
 

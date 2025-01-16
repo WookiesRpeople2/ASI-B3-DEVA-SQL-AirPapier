@@ -12,7 +12,6 @@ public class Config {
 
     private Config() {
         Dotenv dotenv = Dotenv.configure()
-                        .directory("../../assets/.env")
                         .filename(".env")
                         .load();
         this.db = new DatabaseConfig(dotenv);

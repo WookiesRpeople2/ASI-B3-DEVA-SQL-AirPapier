@@ -3,6 +3,7 @@ package com.airpapier;
 import com.airpapier.database.DataBaseConnection;
 import com.airpapier.lib.Router;
 import com.airpapier.middleware.Headers;
+import com.airpapier.routes.CategoryRoutes;
 import com.airpapier.routes.ProductRoutes;
 import com.sun.net.httpserver.HttpServer;
 
@@ -22,6 +23,7 @@ public class App
 
         router.useMiddleware(new Headers());
         router.combineRoutes("/api/products", new ProductRoutes(server));
+        router.combineRoutes("/api/categories", new CategoryRoutes(server));
 
         server.setExecutor(null);
         server.start();

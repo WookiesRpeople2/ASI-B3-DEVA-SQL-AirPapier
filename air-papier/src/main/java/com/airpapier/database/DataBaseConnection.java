@@ -23,7 +23,7 @@ public class DataBaseConnection {
         }
     }
 
-    public static List<Map<String, Object>> getResaults(String query) throws SQLException {
+    public static List<Map<String, Object>> getResults(String query) throws SQLException {
         String[] queries = query.split(";");
         List<Map<String, Object>> allResults = new ArrayList<>();
 
@@ -38,7 +38,7 @@ public class DataBaseConnection {
 
     private static List<Map<String, Object>> processResults(String query) throws SQLException {
         List<Map<String, Object>> results = new ArrayList<>();
-
+        System.out.println(query);
         Statement stmt = connection.createStatement();
         if (query.trim().toUpperCase().startsWith("SELECT")) {
             ResultSet rs = stmt.executeQuery(query);
