@@ -7,7 +7,7 @@ import lombok.Data;
 
 @Data
 @Builder
-@JsonDeserialize(builder = Product.ProductBuilder.class)
+@JsonDeserialize(builder = Client.ClientBuilder.class)
 public class Client {
     private String id;
     @JsonProperty("name") private String name;

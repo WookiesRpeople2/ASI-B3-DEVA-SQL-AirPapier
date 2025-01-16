@@ -20,7 +20,7 @@ public class SupplierHandler {
     }
 
     public void getSupplierById(Context ctx) throws SQLException, IOException {
-        List<Map<String, Object>> Supplier = SupplierDoa.getSupplierById(ctx.request().param("SupplierId"));
+        List<Map<String, Object>> Supplier = SupplierDoa.getSupplierById(ctx.request().param("supplierId"));
         ctx.response().json(Supplier, 200);
     }
 
@@ -31,7 +31,7 @@ public class SupplierHandler {
     }
 
     public void updateSupplier(Context ctx) throws SQLException, IOException {
-        String SupplierId = ctx.request().param("SupplierId");
+        String SupplierId = ctx.request().param("supplierId");
         Supplier updatedSupplier = ctx.request().body(Supplier.class);
 
         List<Map<String, Object>> existingSupplier = SupplierDoa.getSupplierById(SupplierId);
@@ -57,7 +57,7 @@ public class SupplierHandler {
     }
 
     public void deleteSupplier(Context ctx) throws SQLException, IOException {
-        String SupplierId = ctx.request().param("SupplierId");
+        String SupplierId = ctx.request().param("supplierId");
 
         List<Map<String, Object>> existingSupplier = SupplierDoa.getSupplierById(SupplierId);
         if (existingSupplier.get(0) == null) {

@@ -9,10 +9,10 @@ import java.math.BigDecimal;
 
 @Data
 @Builder
-@JsonDeserialize(builder = Supplier.SupplierBuilder.class)
-public class Supplier {
+@JsonDeserialize(builder = Order.OrderBuilder.class)
+public class Order {
     private String id;
-    @JsonProperty("name") private String name;
-    @JsonProperty("email") private BigDecimal email;
-    @JsonProperty("telephone") private Integer telephone;
+    @JsonProperty("client_id") private String client_id;
+    @JsonProperty("total_price") private BigDecimal total_price;
+    @JsonProperty("quantity") private Integer quantity;
 }
