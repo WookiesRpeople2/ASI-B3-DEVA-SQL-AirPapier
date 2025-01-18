@@ -26,31 +26,36 @@ public class CategoryHandler {
 
     public void createCategory(Context ctx) throws SQLException, IOException {
         Category newCategory = ctx.request().body(Category.class);
-        List<Map<String, Object>> createdProduct = categoryDoa.createCategory(newCategory);
-        ctx.response().json(createdProduct, 200);
+        categoryDoa.createCategory(newCategory);
+        ctx.response().json(new SuccessResponse("Category successfully created"), 200);
     }
 
     public void updateCategory(Context ctx) throws SQLException, IOException {
         String categoryId = ctx.request().param("categoryId");
         Category updatedCategory = ctx.request().body(Category.class);
 
-        List<Map<String, Object>> existingCategory = categoryDoa.getCategoryById(categoryId);
-        if (existingCategory.get(0) == null) {
-            ctx.response().json(new ErrorResponse("Product not found"), 404);
+        Map<String, Object> existingCategoryMap = categoryDoa.getCategoryById(categoryId).get(0);
+
+        if (existingCategoryMap.isEmpty()) {
+            ctx.response().json(new ErrorResponse("Category not found"), 404);
             return;
         }
 
-        for (Map<String, Object> row : existingCategory) {
-            if (row.containsKey("name") && updatedCategory.getName() != null) {
-                row.put("name", updatedCategory.getName());
-            }
-            if (row.containsKey("description") && updatedCategory.getDescription() != null) {
-                row.put("description", updatedCategory.getDescription());
-            }
+        Category existingCategory = Category.builder()
+                .id((String) existingCategoryMap.get("id"))
+                .name((String) existingCategoryMap.get("name"))
+                .description((String) existingCategoryMap.get("description"))
+                .build();
+
+        if (updatedCategory.getName() != null) {
+            existingCategory.setName(updatedCategory.getName());
+        }
+        if (updatedCategory.getDescription() != null) {
+            existingCategory.setDescription(updatedCategory.getDescription());
         }
 
-        List<Map<String, Object>> result = categoryDoa.updateCategory(categoryId, (Category) existingCategory.get(0));
-        ctx.response().json(result, 200);
+        categoryDoa.updateCategory(categoryId, existingCategory);
+        ctx.response().json(new SuccessResponse("Category successfully updated"), 200);
     }
 
     public void deleteCategory(Context ctx) throws SQLException, IOException {
@@ -58,11 +63,11 @@ public class CategoryHandler {
 
         List<Map<String, Object>> existingCategory = categoryDoa.getCategoryById(categoryId);
         if (existingCategory.get(0) == null) {
-            ctx.response().json(new ErrorResponse("Product not found"), 404);
+            ctx.response().json(new ErrorResponse("Category not found"), 404);
             return;
         }
 
         categoryDoa.deleteCategory(categoryId);
-        ctx.response().json(new SuccessResponse("Product deleted successfully"), 200);
+        ctx.response().json(new SuccessResponse("Category deleted successfully"), 200);
     }
 }

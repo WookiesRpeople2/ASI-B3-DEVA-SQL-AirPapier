@@ -12,22 +12,15 @@ import java.util.stream.Stream;
 
 public class SeedDataBase extends RandomDataGenerator {
     private static final int SEED_COUNT = 10;
-
-    private static final String URL = Config.getInstance().getDb().getDbUrl();
-    private static final String USER = Config.getInstance().getDb().getDbUser();
-    private static final String PASSWORD = Config.getInstance().getDb().getDbPassword();
-    private static final Connection connection;
-    static {
-        DataBaseConnection.initializeConnection();
-        connection = DataBaseConnection.getConnection();
-    }
-
     private static final List<String> clientIds = new ArrayList<>();
     private static final List<String> supplierIds = new ArrayList<>();
     private static final List<String> categoryIds = new ArrayList<>();
     private static final List<String> productIds = new ArrayList<>();
+    private static Connection connection;
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        DataBaseConnection.getInstance().initializeConnection();
+        connection = DataBaseConnection.getConnection();
         seedIndependentTables();
         seedProducts();
         seedProductSuppliers();

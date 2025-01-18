@@ -20,9 +20,16 @@
 
   <dependencies>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.11.4</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.rest-assured</groupId>
+      <artifactId>rest-assured</artifactId>
+      <version>5.5.0</version>
       <scope>test</scope>
     </dependency>
 
@@ -107,8 +114,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>9</source>
-          <target>9</target>
+          <source>15</source>
+          <target>15</target>
         </configuration>
       </plugin>
 
@@ -124,7 +131,7 @@
             </goals>
             <configuration>
               <files>
-                <file>/src/main/resources/.env</file>
+                <file>${project.basedir}/src/main/resources/.env</file>
               </files>
             </configuration>
           </execution>
@@ -144,9 +151,8 @@
           <password>${DATABASE_PASSWORD}</password>
           <!--suppress UnresolvedMavenProperty -->
           <schemas>${DATABASE}</schemas>
-          <cleanDisabled>false</cleanDisabled>
           <locations>
-            <location>filesystem:/src/main/java/com/airpapier/database/migrations</location>
+            <location>filesystem:${project.basedir}/src/main/java/com/airpapier/database/migrations</location>
           </locations>
         </configuration>
       </plugin>

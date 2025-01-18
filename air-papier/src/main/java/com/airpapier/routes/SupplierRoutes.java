@@ -6,14 +6,13 @@ import com.sun.net.httpserver.HttpServer;
 
 public class SupplierRoutes extends Router {
 
-    public SupplierRoutes(HttpServer server) {
-        super(server);
+    public SupplierRoutes() {
         SupplierHandler supplierHandler = new SupplierHandler();
         get("/", supplierHandler::getAllSuppliers);
-        get("/:productId", supplierHandler::getSupplierById);
+        get("/:supplierId", supplierHandler::getSupplierById);
         post("/", supplierHandler::createSupplier);
-        patch("/:productId", supplierHandler::updateSupplier);
-        delete("/:productId", supplierHandler::deleteSupplier);
+        patch("/:supplierId", supplierHandler::updateSupplier);
+        delete("/:supplierId", supplierHandler::deleteSupplier);
 
     }
 }

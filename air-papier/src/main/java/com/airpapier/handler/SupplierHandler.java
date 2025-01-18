@@ -15,8 +15,8 @@ public class SupplierHandler {
     private final SupplierDoa SupplierDoa = new SupplierDoa();
 
     public void getAllSuppliers(Context ctx) throws SQLException, IOException {
-        List<Map<String, Object>> categories = SupplierDoa.getAllSuppliers();
-        ctx.response().json(categories, 200);
+        List<Map<String, Object>> suppliers = SupplierDoa.getAllSuppliers();
+        ctx.response().json(suppliers, 200);
     }
 
     public void getSupplierById(Context ctx) throws SQLException, IOException {
@@ -26,34 +26,40 @@ public class SupplierHandler {
 
     public void createSupplier(Context ctx) throws SQLException, IOException {
         Supplier newSupplier = ctx.request().body(Supplier.class);
-        List<Map<String, Object>> createdProduct = SupplierDoa.createSupplier(newSupplier);
-        ctx.response().json(createdProduct, 200);
+        SupplierDoa.createSupplier(newSupplier);
+        ctx.response().json(new SuccessResponse("Supplier successfully created"), 200);
     }
 
     public void updateSupplier(Context ctx) throws SQLException, IOException {
-        String SupplierId = ctx.request().param("supplierId");
+        String supplierId = ctx.request().param("supplierId");
         Supplier updatedSupplier = ctx.request().body(Supplier.class);
 
-        List<Map<String, Object>> existingSupplier = SupplierDoa.getSupplierById(SupplierId);
-        if (existingSupplier.get(0) == null) {
+        Map<String, Object> existingSupplierMap = SupplierDoa.getSupplierById(supplierId).get(0);
+        if (existingSupplierMap.isEmpty()) {
             ctx.response().json(new ErrorResponse("Product not found"), 404);
             return;
         }
 
-        for (Map<String, Object> row : existingSupplier) {
-            if (row.containsKey("name") && updatedSupplier.getName() != null) {
-                row.put("name", updatedSupplier.getName());
-            }
-            if (row.containsKey("email") && updatedSupplier.getEmail() != null) {
-                row.put("email", updatedSupplier.getEmail());
-            }
-            if (row.containsKey("telephone") && updatedSupplier.getTelephone() != null) {
-                row.put("telephone", updatedSupplier.getTelephone());
-            }
+        Supplier existingSupplier = Supplier.builder()
+                        .id((String) existingSupplierMap.get("id"))
+                        .email((String) existingSupplierMap.get("email"))
+                        .name((String) existingSupplierMap.get("name"))
+                        .email((String) existingSupplierMap.get("email"))
+                        .telephone((String) existingSupplierMap.get("telephone"))
+                        .build();
+
+        if (updatedSupplier.getEmail() != null) {
+            existingSupplier.setEmail(updatedSupplier.getEmail());
+        }
+        if (updatedSupplier.getName() != null) {
+            existingSupplier.setName(updatedSupplier.getName());
+        }
+        if (updatedSupplier.getTelephone() != null) {
+            existingSupplier.setTelephone(updatedSupplier.getTelephone());
         }
 
-        List<Map<String, Object>> result = SupplierDoa.updateSupplier(SupplierId, (Supplier) existingSupplier.get(0));
-        ctx.response().json(result, 200);
+        SupplierDoa.updateSupplier(supplierId, existingSupplier);
+        ctx.response().json(new SuccessResponse("Supplier successfully Updated"), 200);
     }
 
     public void deleteSupplier(Context ctx) throws SQLException, IOException {
@@ -61,11 +67,11 @@ public class SupplierHandler {
 
         List<Map<String, Object>> existingSupplier = SupplierDoa.getSupplierById(SupplierId);
         if (existingSupplier.get(0) == null) {
-            ctx.response().json(new ErrorResponse("Product not found"), 404);
+            ctx.response().json(new ErrorResponse("Supplier not found"), 404);
             return;
         }
 
         SupplierDoa.deleteSupplier(SupplierId);
-        ctx.response().json(new SuccessResponse("Product deleted successfully"), 200);
+        ctx.response().json(new SuccessResponse("Supplier deleted successfully"), 200);
     }
 }

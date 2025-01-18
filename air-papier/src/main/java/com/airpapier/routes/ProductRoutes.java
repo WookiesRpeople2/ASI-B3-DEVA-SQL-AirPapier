@@ -6,8 +6,7 @@ import com.sun.net.httpserver.HttpServer;
 
 public class ProductRoutes extends Router {
 
-    public ProductRoutes(HttpServer server) {
-        super(server);
+    public ProductRoutes() {
         ProductHandler productHandler = new ProductHandler();
         get("/", productHandler::getAllProducts);
         get("/:productId", productHandler::getProductById);

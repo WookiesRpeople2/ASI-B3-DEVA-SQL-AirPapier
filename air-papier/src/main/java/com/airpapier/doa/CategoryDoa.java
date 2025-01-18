@@ -20,25 +20,23 @@ public class CategoryDoa {
         return DataBaseConnection.getResults(query);
     }
 
-    public List<Map<String, Object>> createCategory(Category category) throws SQLException {
+    public void createCategory(Category category) throws SQLException {
         String query = "INSERT INTO categories (name, description) VALUES ('" +
-                category.getName() + "', " +
+                category.getName() + "', '" +
                 category.getDescription() +
-                ")";
-
-        return DataBaseConnection.getResults(query);
+                "')";
+        DataBaseConnection.getResults(query);
     }
 
-    public List<Map<String, Object>> updateCategory(String id, Category category) throws SQLException {
-        String query = "UPDATE products SET name = '" + category.getName() +
-                "', description = " + category.getDescription() +
+    public void updateCategory(String id, Category category) throws SQLException {
+        String query = "UPDATE categories SET name = '" + category.getName() + "'" +
+                ", description = '" + category.getDescription() + "'" +
                 " WHERE id = '" + id + "'";
-        return DataBaseConnection.getResults(query);
+        DataBaseConnection.getResults(query);
     }
 
     public void deleteCategory(String id) throws SQLException {
         String query = "DELETE FROM products WHERE id = '" + id + "'";
-
         DataBaseConnection.getResults(query);
     }
 }

@@ -18,27 +18,25 @@ public class SupplierDoa {
         return DataBaseConnection.getResults(query);
     }
 
-    public List<Map<String, Object>> createSupplier(Supplier supplier) throws SQLException {
-        String query = "INSERT INTO suppliers (name, email, telephone, address) VALUES ('" +
-                supplier.getName() + "', " +
-                supplier.getEmail() + ", " +
+    public void createSupplier(Supplier supplier) throws SQLException {
+        String query = "INSERT INTO suppliers (name, email, telephone) VALUES ('" +
+                supplier.getName() + "', '" +
+                supplier.getEmail() + "', '" +
                 supplier.getTelephone() +
-                ")";
-
-        return DataBaseConnection.getResults(query);
+                "')";
+        DataBaseConnection.getResults(query);
     }
 
-    public List<Map<String, Object>> updateSupplier(String id, Supplier supplier) throws SQLException {
+    public void updateSupplier(String id, Supplier supplier) throws SQLException {
         String query = "UPDATE suppliers SET name = '" + supplier.getName() +
-                "', email = " + supplier.getEmail() +
-                ", telephone = " + supplier.getTelephone() +
-                " WHERE id = '" + id + "'";
-        return DataBaseConnection.getResults(query);
+                "', email = '" + supplier.getEmail() +
+                "', telephone = '" + supplier.getTelephone() +
+                "' WHERE id = '" + id + "'";
+        DataBaseConnection.getResults(query);
     }
 
     public void deleteSupplier(String id) throws SQLException {
         String query = "DELETE FROM suppliers WHERE id = '" + id + "'";
-
         DataBaseConnection.getResults(query);
     }
 }

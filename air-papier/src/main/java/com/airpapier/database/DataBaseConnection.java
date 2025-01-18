@@ -9,9 +9,11 @@ public class DataBaseConnection {
     private static final String URL = Config.getInstance().getDb().getDbUrl();
     private static final String USER = Config.getInstance().getDb().getDbUser();
     private static final String PASSWORD = Config.getInstance().getDb().getDbPassword();
+    @Getter static final DataBaseConnection instance = new DataBaseConnection();
     @Getter private static Connection connection;
 
-    public static void initializeConnection() {
+
+    public void initializeConnection() {
         try {
             connection = DriverManager.getConnection(URL, USER, PASSWORD);
             if (connection != null) {
@@ -38,7 +40,6 @@ public class DataBaseConnection {
 
     private static List<Map<String, Object>> processResults(String query) throws SQLException {
         List<Map<String, Object>> results = new ArrayList<>();
-        System.out.println(query);
         Statement stmt = connection.createStatement();
         if (query.trim().toUpperCase().startsWith("SELECT")) {
             ResultSet rs = stmt.executeQuery(query);
@@ -57,6 +58,7 @@ public class DataBaseConnection {
         } else {
             stmt.executeUpdate(query);
         }
+
         return results;
     }
 }

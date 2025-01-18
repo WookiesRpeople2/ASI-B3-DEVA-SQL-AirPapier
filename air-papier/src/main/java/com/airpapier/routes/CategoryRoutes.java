@@ -6,8 +6,7 @@ import com.sun.net.httpserver.HttpServer;
 
 public class CategoryRoutes extends Router {
 
-    public CategoryRoutes(HttpServer server){
-        super(server);
+    public CategoryRoutes(){
         CategoryHandler categoryHandler = new CategoryHandler();
         get("/", categoryHandler::getAllCategories);
         get("/:categoryId", categoryHandler::getCategoryById);

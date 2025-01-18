@@ -13,6 +13,6 @@ import java.math.BigDecimal;
 public class Supplier {
     private String id;
     @JsonProperty("name") private String name;
-    @JsonProperty("email") private BigDecimal email;
-    @JsonProperty("telephone") private Integer telephone;
+    @JsonProperty("email") private String email;
+    @JsonProperty("telephone") private String telephone;
 }

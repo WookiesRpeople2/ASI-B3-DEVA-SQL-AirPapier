@@ -18,28 +18,25 @@ public class OrderDoa {
         return DataBaseConnection.getResults(query);
     }
 
-    public List<Map<String, Object>> createOrder(Order order) throws SQLException {
+    public void createOrder(Order order) throws SQLException {
         String query = "INSERT INTO orders (client_id, total_price, quantity) VALUES ('" +
                 order.getClient_id() + "', " +
                 order.getTotal_price() + ", " +
                 order.getQuantity() +
                 ")";
-
-        return DataBaseConnection.getResults(query);
+        DataBaseConnection.getResults(query);
     }
 
-    public List<Map<String, Object>> updateOrder(String id, Order order) throws SQLException {
+    public void updateOrder(String id, Order order) throws SQLException {
         String query = "UPDATE orders SET client_id = '" + order.getClient_id() +
                 "', total_price = " + order.getTotal_price() +
                 ", quantity = " + order.getQuantity() +
-                ", category_id = " +
                 " WHERE id = '" + id + "'";
-        return DataBaseConnection.getResults(query);
+        DataBaseConnection.getResults(query);
     }
 
     public void deleteOrder(String id) throws SQLException {
         String query = "DELETE FROM orders WHERE id = '" + id + "'";
-
         DataBaseConnection.getResults(query);
     }
 }

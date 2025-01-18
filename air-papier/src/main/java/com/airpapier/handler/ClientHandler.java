@@ -26,37 +26,44 @@ public class ClientHandler {
 
     public void createClient(Context ctx) throws SQLException, IOException {
         Client newClient = ctx.request().body(Client.class);
-        List<Map<String, Object>> createdProduct = clientDoa.createClient(newClient);
-        ctx.response().json(createdProduct, 200);
+        clientDoa.createClient(newClient);
+        ctx.response().json(new SuccessResponse("Client successfully created"), 200);
     }
 
     public void updateClient(Context ctx) throws SQLException, IOException {
         String clientId = ctx.request().param("clientId");
         Client updatedClient = ctx.request().body(Client.class);
 
-        List<Map<String, Object>> existingClient = clientDoa.getClientById(clientId);
-        if (existingClient.get(0) == null) {
-            ctx.response().json(new ErrorResponse("Product not found"), 404);
+        Map<String, Object> existingClientMap = clientDoa.getClientById(clientId).get(0);
+
+        if (existingClientMap.isEmpty()) {
+            ctx.response().json(new ErrorResponse("Client not found"), 404);
             return;
         }
 
-        for (Map<String, Object> row : existingClient) {
-            if (row.containsKey("name") && updatedClient.getName() != null) {
-                row.put("name", updatedClient.getName());
-            }
-            if (row.containsKey("email") && updatedClient.getEmail() != null) {
-                row.put("email", updatedClient.getEmail());
-            }
-            if (row.containsKey("telephone") && updatedClient.getTelephone() != null) {
-                row.put("telephone", updatedClient.getTelephone());
-            }
-            if (row.containsKey("address") && updatedClient.getAddress() != null) {
-                row.put("address", updatedClient.getAddress());
-            }
+        Client existingClient = Client.builder()
+                .id((String) existingClientMap.get("id"))
+                .name((String) existingClientMap.get("name"))
+                .email((String) existingClientMap.get("email"))
+                .telephone((String) existingClientMap.get("telephone"))
+                .address((String) existingClientMap.get("address"))
+                .build();
+
+        if (updatedClient.getName() != null) {
+            existingClient.setName(updatedClient.getName());
+        }
+        if (updatedClient.getEmail() != null) {
+            existingClient.setEmail(updatedClient.getEmail());
+        }
+        if (updatedClient.getTelephone() != null) {
+            existingClient.setTelephone(updatedClient.getTelephone());
+        }
+        if (updatedClient.getAddress() != null) {
+            existingClient.setAddress(updatedClient.getAddress());
         }
 
-        List<Map<String, Object>> result = clientDoa.updateClient(clientId, (Client) existingClient.get(0));
-        ctx.response().json(result, 200);
+        clientDoa.updateClient(clientId, existingClient);
+        ctx.response().json(new SuccessResponse("Product successfully updated"), 200);
     }
 
     public void deleteClient(Context ctx) throws SQLException, IOException {

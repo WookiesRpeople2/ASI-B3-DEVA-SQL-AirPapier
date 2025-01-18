@@ -7,14 +7,11 @@ import com.sun.net.httpserver.HttpServer;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @Accessors(fluent = true)
-@RequiredArgsConstructor
-public class Router {
-    private final HttpServer server;
+public class Router extends Server{
     @Setter private Middleware useMiddleware;
     private final RouteNode root = new RouteNode();
     private String basePath = "";

@@ -6,8 +6,8 @@ import com.airpapier.lib.Router;
 import com.sun.net.httpserver.HttpServer;
 
 public class OrderRoutes extends Router {
-    public OrderRoutes(HttpServer server) {
-        super(server);
+
+    public OrderRoutes() {
         OrderHandler orderHandler = new OrderHandler();
         get("/", orderHandler::getAllOrders);
         get("/:orderId", orderHandler::getOrderById);

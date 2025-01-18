@@ -20,28 +20,26 @@ public class ClientDoa {
         return DataBaseConnection.getResults(query);
     }
 
-    public List<Map<String, Object>> createClient(Client client) throws SQLException {
+    public void createClient(Client client) throws SQLException {
         String query = "INSERT INTO clients (name, email, telephone, address) VALUES ('" +
-                client.getName() + "', " +
-                client.getEmail() + ", " +
-                client.getTelephone() + ", " +
-                client.getAddress() + ")";
-
-        return DataBaseConnection.getResults(query);
+                client.getName() + "', '" +
+                client.getEmail() + "', '" +
+                client.getTelephone() + "', '" +
+                client.getAddress() + "')";
+        DataBaseConnection.getResults(query);
     }
 
-    public List<Map<String, Object>> updateClient(String id, Client client) throws SQLException {
+    public void updateClient(String id, Client client) throws SQLException {
         String query = "UPDATE clients SET name = '" + client.getName() +
-                "', email = " + client.getEmail() +
-                ", telephone = " + client.getTelephone() +
-                ", address = " + client.getAddress() +
-                " WHERE id = '" + id + "'";
-        return DataBaseConnection.getResults(query);
+                "', email = '" + client.getEmail() +
+                "', telephone = '" + client.getTelephone() +
+                "', address = '" + client.getAddress() +
+                "' WHERE id = '" + id + "'";
+        DataBaseConnection.getResults(query);
     }
 
     public void deleteClient(String id) throws SQLException {
         String query = "DELETE FROM clients WHERE id = '" + id + "'";
-
         DataBaseConnection.getResults(query);
     }
 }

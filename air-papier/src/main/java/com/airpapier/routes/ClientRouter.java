@@ -7,8 +7,7 @@ import com.sun.net.httpserver.HttpServer;
 
 public class ClientRouter extends Router {
 
-    public ClientRouter(HttpServer server){
-        super(server);
+    public ClientRouter(){
         ClientHandler clientHandler = new ClientHandler();
         get("/", clientHandler::getAllClients);
         get("/:clientId", clientHandler::getClientById);
