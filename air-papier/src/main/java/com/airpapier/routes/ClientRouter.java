@@ -11,6 +11,7 @@ public class ClientRouter extends Router {
         ClientHandler clientHandler = new ClientHandler();
         get("/", clientHandler::getAllClients);
         get("/:clientId", clientHandler::getClientById);
+        get("/:clientId/orders", clientHandler::getOrderByClientId);
         post("/", clientHandler::createClient);
         patch("/:clientId", clientHandler::updateClient);
         delete("/:clientId", clientHandler::deleteClient);

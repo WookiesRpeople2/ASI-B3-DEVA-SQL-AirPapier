@@ -16,6 +16,11 @@ public class RandomDataGenerator {
         return names[RANDOM.nextInt(names.length)] + " " + names[RANDOM.nextInt(names.length)];
     }
 
+    public static String generateRandomStatus() {
+        String[] status = {"Pending", "Completed", "Paid"};
+        return status[RANDOM.nextInt(status.length)];
+    }
+
     public static String generateRandomEmail() {
         String[] domains = {"example.com", "mail.com", "test.com"};
         return "user" + RANDOM.nextInt(1000) + "@" + domains[RANDOM.nextInt(domains.length)];

@@ -1,73 +1,104 @@
+
 package com.airpapier.handler;
 
-import com.airpapier.doa.CategoryDoa;
+import com.airpapier.doa.GeneralDoa;
 import com.airpapier.lib.Context;
 import com.airpapier.lib.ErrorResponse;
 import com.airpapier.lib.SuccessResponse;
 import com.airpapier.model.Category;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 public class CategoryHandler {
-    private final CategoryDoa categoryDoa = new CategoryDoa();
+    private final GeneralDoa<Category> categoryDoa = new GeneralDoa<>("categories", Category.class);
 
-    public void getAllCategories(Context ctx) throws SQLException, IOException {
-        List<Map<String, Object>> categories = categoryDoa.getAllCategories();
-        ctx.response().json(categories, 200);
-    }
-
-    public void getCategoryById(Context ctx) throws SQLException, IOException {
-        List<Map<String, Object>> category = categoryDoa.getCategoryById(ctx.request().param("categoryId"));
-        ctx.response().json(category, 200);
-    }
-
-    public void createCategory(Context ctx) throws SQLException, IOException {
-        Category newCategory = ctx.request().body(Category.class);
-        categoryDoa.createCategory(newCategory);
-        ctx.response().json(new SuccessResponse("Category successfully created"), 200);
-    }
-
-    public void updateCategory(Context ctx) throws SQLException, IOException {
-        String categoryId = ctx.request().param("categoryId");
-        Category updatedCategory = ctx.request().body(Category.class);
-
-        Map<String, Object> existingCategoryMap = categoryDoa.getCategoryById(categoryId).get(0);
-
-        if (existingCategoryMap.isEmpty()) {
-            ctx.response().json(new ErrorResponse("Category not found"), 404);
-            return;
+    public void getAllCategories(Context ctx) throws IOException {
+        try {
+            List<Category> categories = categoryDoa.getAll();
+            if (categories.isEmpty()) {
+                ctx.response().json(new SuccessResponse("No categories found"), 200);
+                return;
+            }
+            ctx.response().json(categories, 200);
+        } catch (Exception e) {
+            ctx.response().json(new ErrorResponse("Unexpected error: " + e.getMessage()), 500);
         }
+    }
 
-        Category existingCategory = Category.builder()
-                .id((String) existingCategoryMap.get("id"))
-                .name((String) existingCategoryMap.get("name"))
-                .description((String) existingCategoryMap.get("description"))
-                .build();
+    public void getCategoryById(Context ctx) throws IOException {
+        try {
+            String categoryId = ctx.request().param("categoryId");
 
+            Category category = categoryDoa.getById(categoryId);
+            if (category == null) {
+                ctx.response().json(new ErrorResponse("Category not found"), 404);
+                return;
+            }
+
+            ctx.response().json(category, 200);
+        } catch (Exception e) {
+            ctx.response().json(new ErrorResponse("Unexpected error: " + e.getMessage()), 500);
+        }
+    }
+
+    public void createCategory(Context ctx) throws IOException {
+        try {
+            Category newCategory = ctx.request().body(Category.class);
+            categoryDoa.create(newCategory);
+            ctx.response().json(new SuccessResponse("Category successfully created", newCategory), 201);
+        } catch (Exception e) {
+            ctx.response().json(new ErrorResponse("Unexpected error: " + e.getMessage()), 500);
+        }
+    }
+
+    public void updateCategory(Context ctx) throws IOException {
+        try {
+            String categoryId = ctx.request().param("categoryId");
+            Category updatedCategory = ctx.request().body(Category.class);
+            if (updatedCategory == null) {
+                ctx.response().json(new ErrorResponse("Request body is required"), 400);
+                return;
+            }
+
+            Category existingCategory = categoryDoa.getById(categoryId);
+            if (existingCategory == null) {
+                ctx.response().json(new ErrorResponse("Category not found"), 404);
+                return;
+            }
+
+            updateCategoryFields(existingCategory, updatedCategory);
+
+            categoryDoa.update(categoryId, existingCategory);
+            ctx.response().json(new SuccessResponse("Category successfully updated", existingCategory), 200);
+        } catch (Exception e) {
+            ctx.response().json(new ErrorResponse("Unexpected error: " + e.getMessage()), 500);
+        }
+    }
+
+    public void deleteCategory(Context ctx) throws IOException {
+        try {
+            String categoryId = ctx.request().param("categoryId");
+
+            Category existingCategory = categoryDoa.getById(categoryId);
+            if (existingCategory == null) {
+                ctx.response().json(new ErrorResponse("Category not found"), 404);
+                return;
+            }
+
+            categoryDoa.delete(categoryId);
+            ctx.response().json(new SuccessResponse("Category deleted successfully"), 200);
+        } catch (Exception e) {
+            ctx.response().json(new ErrorResponse("Unexpected error: " + e.getMessage()), 500);
+        }
+    }
+
+    private void updateCategoryFields(Category existingCategory, Category updatedCategory) {
         if (updatedCategory.getName() != null) {
             existingCategory.setName(updatedCategory.getName());
         }
         if (updatedCategory.getDescription() != null) {
             existingCategory.setDescription(updatedCategory.getDescription());
         }
-
-        categoryDoa.updateCategory(categoryId, existingCategory);
-        ctx.response().json(new SuccessResponse("Category successfully updated"), 200);
-    }
-
-    public void deleteCategory(Context ctx) throws SQLException, IOException {
-        String categoryId = ctx.request().param("categoryId");
-
-        List<Map<String, Object>> existingCategory = categoryDoa.getCategoryById(categoryId);
-        if (existingCategory.get(0) == null) {
-            ctx.response().json(new ErrorResponse("Category not found"), 404);
-            return;
-        }
-
-        categoryDoa.deleteCategory(categoryId);
-        ctx.response().json(new SuccessResponse("Category deleted successfully"), 200);
     }
 }

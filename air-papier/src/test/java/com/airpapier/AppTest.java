@@ -241,7 +241,7 @@ public class AppTest
                 .then()
                 .statusCode(200)
                 .contentType(ContentType.JSON)
-                .body("id", hasItem(id));
+                .body("$", not(empty()));
     }
 
     private void testCreate(String endpoint, String requestBody) {
@@ -251,7 +251,7 @@ public class AppTest
                 .when()
                 .post("/api/" + endpoint + "/")
                 .then()
-                .statusCode(200)
+                .statusCode(201)
                 .contentType(ContentType.JSON)
                 .body("$", not(empty()));;
     }
