@@ -2,6 +2,9 @@
 
 <a href="https://app.eraser.io/workspace/sHyYKt10oFa4tpWLeij8?elements=s7DYVSXYDmJn-LXi_mUujQ"><img src="https://app.eraser.io/workspace/sHyYKt10oFa4tpWLeij8/preview?elements=s7DYVSXYDmJn-LXi_mUujQ&type=embed" /></a>
 ---
+# IMPORTANT
+if you follwed the steps in the V1 please drop and run `mvn initialize flyway:clean` in order to re-init the schema seeing as the tables have changed and then follow the run setps as seen down below 
+
 # RUN
 
 In order to run this project please follow the steps below
