@@ -8,7 +8,7 @@ In order to run this project please follow the steps below
 - clone the project into your local repository
 - `cd air-papier`
 - run `docker-compose up -d`
-- next copy the environment variables from the .env.example to a new file called .env
+- next copy the environment variables from the .env.example to a new file called .env in the same folder `air-papier/src/main/resources`
 - next run `mvn initialize flyway:migrate` in order to add the database migration, the migrations can be fount is `src/java/main/Database/migrations`
 - next in order to seed your database run the command `mvn package`
 
