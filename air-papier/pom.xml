@@ -64,18 +64,6 @@
       <version>2.18.2</version>
     </dependency>
 
-    <dependency>
-      <groupId>jakarta.validation</groupId>
-      <artifactId>jakarta.validation-api</artifactId>
-      <version>3.1.0</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.jooq</groupId>
-      <artifactId>jooq</artifactId>
-      <version>3.19.18</version>
-    </dependency>
-
   </dependencies>
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
@@ -163,7 +151,6 @@
           <password>${DATABASE_PASSWORD}</password>
           <!--suppress UnresolvedMavenProperty -->
           <schemas>${DATABASE}</schemas>
-          <cleanDisabled>false</cleanDisabled>
           <locations>
             <location>filesystem:${project.basedir}/src/main/java/com/airpapier/database/migrations</location>
           </locations>
