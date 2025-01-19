@@ -55,15 +55,6 @@ public class OrderLinesDoa {
                 .intoMaps();
     }
 
-
-    public List<Order> getOrdersByDateRange(LocalDate startDate, LocalDate endDate) {
-        return dsl.select()
-                .from(table("orders"))
-                .where(field("updated_at").between(startDate).and(endDate))
-                .fetch()
-                .map(DynamicMapper.makeMapper(Order.class));
-    }
-
     public List<Map<String, Object>> getOrdersByClientId(String clientId) {
         return dsl.select(
                         field("o.id").as("order_id"),
@@ -92,28 +83,34 @@ public class OrderLinesDoa {
     }
 
     public List<Map<String, Object>> searchOrders(Map<String, Object> criteria) {
-        SelectConditionStep<?> query = dsl.select()
+        SelectConditionStep<?> query = dsl.select(field("o.id").as("order_id"),
+                        field("o.client_id").as("client_id"),
+                        field("o.total_price").as("total_price"),
+                        field("o.quantity").as("order_quantity"))
                 .from(table("orders").as("o"))
                 .leftJoin(table("order_lines").as("ol")).on(field("o.id").eq(field("ol.order_id")))
-                .leftJoin(table("products").as("p")).on(field("ol.product_id").eq(field("p.id"))).where(noCondition());
+                .leftJoin(table("products").as("p")).on(field("ol.product_id").eq(field("p.id")))
+                .where(noCondition());
+
+        Condition condition = noCondition();
 
         if (criteria.containsKey("clientId")) {
-            query.and (field("o.client_id").eq(criteria.get("clientId")));
+            condition = condition.and(field("o.client_id").eq(criteria.get("clientId")));
         }
         if (criteria.containsKey("status")) {
-            query.and(field("ol.status").eq(criteria.get("status")));
+            condition = condition.and(field("ol.status").eq(criteria.get("status")));
         }
         if (criteria.containsKey("productId")) {
-            query.and(field("ol.product_id").eq(criteria.get("productId")));
+            condition = condition.and(field("ol.product_id").eq(criteria.get("productId")));
         }
         if (criteria.containsKey("startDate")) {
-            query.and(field("o.created_at").ge(criteria.get("startDate")));
+            condition = condition.and(field("o.created_at").ge(criteria.get("startDate")));
         }
         if (criteria.containsKey("endDate")) {
-            query.and(field("o.created_at").le(criteria.get("endDate")));
+            condition = condition.and(field("o.created_at").le(criteria.get("endDate")));
         }
 
-        return query.fetch().intoMaps();
+        return query.$where(condition).fetch().intoMaps();
     }
 
     public List<Map<String, Object>> getTopSellingProducts(LocalDate startDate, LocalDate endDate) {

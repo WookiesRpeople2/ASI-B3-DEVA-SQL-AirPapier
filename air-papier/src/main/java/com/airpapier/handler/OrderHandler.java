@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 public class OrderHandler {
     private final GeneralDoa<Order> orderDoa = new GeneralDoa<>("orders", Order.class);
@@ -37,13 +38,13 @@ public class OrderHandler {
                     criteria.put("endDate", LocalDate.parse(end));
                 }
                 if (clientId != null) {
-                    criteria.put("clientId", Integer.parseInt(clientId));
+                    criteria.put("clientId", UUID.fromString(clientId));
                 }
                 if (status != null) {
                     criteria.put("status", status);
                 }
                 if (productId != null) {
-                    criteria.put("productId", Integer.parseInt(productId));
+                    criteria.put("productId", UUID.fromString(productId));
                 }
 
                 List<Map<String, Object>> orders = orderLinesDoa.searchOrders(criteria);
